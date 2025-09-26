@@ -3,11 +3,15 @@
 import 'package:ai_scribe_copilot/providers/patient_provider.dart';
 import 'package:ai_scribe_copilot/screens/patient_list_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import Provider
+import 'package:provider/provider.dart';
+import 'package:ai_scribe_copilot/background_service.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize the background service
+  await initializeService();
+
   runApp(
-    // Wrap the app with the provider
     ChangeNotifierProvider(
       create: (context) => PatientProvider(),
       child: const MyApp(),

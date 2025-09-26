@@ -3,7 +3,9 @@
 import 'package:ai_scribe_copilot/providers/patient_provider.dart';
 import 'package:ai_scribe_copilot/screens/patient_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+
 
 // Convert to a StatefulWidget to use initState
 class PatientListScreen extends StatefulWidget {
@@ -19,10 +21,21 @@ class _PatientListScreenState extends State<PatientListScreen> {
     super.initState();
     // Trigger the fetch operation when the screen is first built
     // 'listen: false' is important inside initState
+    _checkBatteryOptimizationPermission();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<PatientProvider>(context, listen: false).fetchPatients();
     });
   }
+
+  Future<void> _checkBatteryOptimizationPermission() async {
+  // Check the status of the permission
+  var status = await Permission.ignoreBatteryOptimizations.status;
+  
+  // If the permission is not granted, request it
+  if (!status.isGranted) {
+    await Permission.ignoreBatteryOptimizations.request();
+  }
+}
 
   @override
   Widget build(BuildContext context) {
